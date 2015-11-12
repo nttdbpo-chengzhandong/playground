@@ -3,6 +3,7 @@ variable "aws_secret_key" {}
 variable "region" {
   default = "ap-northeast-1"
 }
+variable "aws_public_key" {}
 
 provider "aws" {
   access_key = "${var.aws_access_key}"
@@ -64,6 +65,12 @@ resource "aws_security_group" "my-sg" {
   }
 }
 
+# Key Pair
+resource "aws_key_pair" "my-key" {
+  key_name = "my-key"
+  public_key = "${var.aws_public_key}"
+}
+
 # EC2 Instance
 resource "aws_instance" "my-instance" {
   ami = "ami-b80b6db8" # CentOS7
@@ -81,10 +88,12 @@ resource "aws_instance" "my-instance" {
     device_name = "/dev/sdf"
     volume_type = "gp2"
     volume_size = "100"
+    # delete_on_termination = false # <<<< !!!IMPORTANT!!!
   }
   tags {
     Name = "my-instance"
   }
+  key_name = "my-key"
 }
 
 output "public ip of cm-test" {
