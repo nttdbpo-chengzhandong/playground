@@ -53,7 +53,7 @@ resource "aws_route_table" "my-route" {
 }
 
 resource "aws_route_table_association" "puclic-c" {
-  subnet_id = "${aws_subnet.public-a.id}"
+  subnet_id = "${aws_subnet.public-c.id}"
   route_table_id = "${aws_route_table.my-route.id}"
 }
 
@@ -88,7 +88,7 @@ resource "aws_instance" "my-instance" {
   vpc_security_group_ids = [
     "${aws_security_group.my-sg.id}"
   ]
-  subnet_id = "${aws_subnet.public-a.id}"
+  subnet_id = "${aws_subnet.public-c.id}"
   associate_public_ip_address = false
   root_block_device = {
     volume_type = "gp2"
