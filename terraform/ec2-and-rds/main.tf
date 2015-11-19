@@ -154,13 +154,30 @@ resource "aws_instance" "my-instance" {
   tags {
     Name = "my-instance"
   }
-  key_name = "my-key"
+  key_name = "${aws_key_pair.my-key.key_name}"
 }
 
 # EIP
 resource "aws_eip" "my-eip" {
   instance = "${aws_instance.my-instance.id}"
   vpc = true
+}
+
+# RDS DB Parameter Group
+resource "aws_db_parameter_group" "my-rds-pg" {
+  name = "my-rds-pg"
+  family = "mysql5.6"
+  description = "RDS parameter group"
+
+  parameter {
+    name = "character_set_server"
+    value = "utf8"
+  }
+
+  parameter {
+    name = "character_set_client"
+    value = "utf8"
+  }
 }
 
 # RDS
@@ -170,6 +187,7 @@ resource "aws_db_instance" "my-rds" {
   engine = "mysql"
   engine_version = "5.6.22"
   instance_class = "db.t2.micro"
+  parameter_group_name = "${aws_db_parameter_group.my-rds-pg.name}"
   # general purpose SSD
   storage_type = "gp2"
   username = "${var.db_username}"
