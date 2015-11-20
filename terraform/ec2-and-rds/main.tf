@@ -81,6 +81,15 @@ resource "aws_route_table_association" "my-assoc" {
   subnet_id = "${aws_subnet.public-c.id}"
   route_table_id = "${aws_route_table.my-route.id}"
 }
+resource "aws_route_table_association" "my-rds-a-assoc" {
+  subnet_id = "${aws_subnet.private-rds-a.id}"
+  route_table_id = "${aws_route_table.my-route.id}"
+}
+resource "aws_route_table_association" "my-rds-c-assoc" {
+  subnet_id = "${aws_subnet.private-rds-c.id}"
+  route_table_id = "${aws_route_table.my-route.id}"
+}
+
 
 # Security Group
 ### Web
