@@ -45,7 +45,7 @@ resource "aws_route_table" "my-route" {
   }
 }
 
-resource "aws_route_table_association" "puclic-c" {
+resource "aws_route_table_association" "public-c" {
   subnet_id = "${aws_subnet.public-c.id}"
   route_table_id = "${aws_route_table.my-route.id}"
 }
@@ -96,7 +96,7 @@ resource "aws_instance" "my-instance" {
   tags {
     Name = "my-instance"
   }
-  key_name = "my-key"
+  key_name = "${aws_key_pair.my-key.key_name}"
 }
 
 resource "aws_eip" "my-eip" {
