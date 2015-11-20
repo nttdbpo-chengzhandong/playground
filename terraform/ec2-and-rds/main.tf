@@ -66,28 +66,34 @@ resource "aws_db_subnet_group" "my-rds-subnet-group" {
 }
 
 # Route Table
-resource "aws_route_table" "my-route" {
+resource "aws_route_table" "my-route-public" {
   vpc_id = "${aws_vpc.my-vpc.id}"
   route {
     cidr_block = "0.0.0.0/0"
     gateway_id = "${aws_internet_gateway.my-igw.id}"
   }
   tags {
-    Name = "my-route-table"
+    Name = "my-route-table-public"
+  }
+}
+resource "aws_route_table" "my-route-private" {
+  vpc_id = "${aws_vpc.my-vpc.id}"
+  tags {
+    Name = "my-route-table-private"
   }
 }
 
 resource "aws_route_table_association" "my-assoc" {
   subnet_id = "${aws_subnet.public-c.id}"
-  route_table_id = "${aws_route_table.my-route.id}"
+  route_table_id = "${aws_route_table.my-route-public.id}"
 }
 resource "aws_route_table_association" "my-rds-a-assoc" {
   subnet_id = "${aws_subnet.private-rds-a.id}"
-  route_table_id = "${aws_route_table.my-route.id}"
+  route_table_id = "${aws_route_table.my-route-private.id}"
 }
 resource "aws_route_table_association" "my-rds-c-assoc" {
   subnet_id = "${aws_subnet.private-rds-c.id}"
-  route_table_id = "${aws_route_table.my-route.id}"
+  route_table_id = "${aws_route_table.my-route-private.id}"
 }
 
 
