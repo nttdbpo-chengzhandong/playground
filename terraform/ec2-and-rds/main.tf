@@ -37,7 +37,7 @@ resource "aws_subnet" "public-c" {
 resource "aws_subnet" "private-rds-a" {
   vpc_id = "${aws_vpc.my-vpc.id}"
   cidr_block = "10.1.2.0/24"
-  availability_zone = "ap-northeast-1a"
+  availability_zone = "ap-northeast-1b"
   tags {
     Name = "my-subnet-private-rds-a"
   }
@@ -97,6 +97,12 @@ resource "aws_security_group" "my-web-sg" {
   ingress {
     from_port = 22
     to_port = 22
+    protocol = "tcp"
+    cidr_blocks = ["0.0.0.0/0"]
+  }
+  ingress {
+    from_port = 80
+    to_port = 80
     protocol = "tcp"
     cidr_blocks = ["0.0.0.0/0"]
   }
@@ -161,6 +167,7 @@ resource "aws_instance" "my-instance" {
     Name = "my-instance"
   }
   key_name = "${aws_key_pair.my-key.key_name}"
+  monitoring = true
 }
 
 # EIP
