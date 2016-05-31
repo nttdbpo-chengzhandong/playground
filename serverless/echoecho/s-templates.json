@@ -1,0 +1,7 @@
+{
+  "apiGatewayRequestTemplate": {
+    "application/json": {
+      "queryParams" : "$input.params().querystring"
+    }
+  }
+}
