@@ -1,6 +1,6 @@
 'use strict';
 
-module.exports.handler = function(event, context, cb) {
+module.exports.handler = (event, context, cb) => {
   console.log("event:", event);
   console.log("context:", context);
 
