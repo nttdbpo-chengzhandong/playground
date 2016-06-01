@@ -5,6 +5,6 @@ module.exports.handler = function(event, context, cb) {
   console.log("context:", context);
 
   return cb(null, {
-    message: 'Go Serverless! Your Lambda function executed successfully!'
+    message: 'UserAgent is ' + event.userAgent
   });
 };
