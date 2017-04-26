@@ -1,0 +1,41 @@
+{
+    "id": "http://json-schema.org/draft-04/schema#",
+    "$schema": "http://json-schema.org/draft-04/schema#",
+    "description": "JSON-SchemaのValidatorテスト用",
+    "type": "object",
+    "properties": {
+        "id": {
+            "description": "ID",
+            "type": "integer"
+        },
+        "oneOf": [
+            { "$ref":"#/definitions/one_required" },
+            { "$ref":"#/definitions/two_required" }
+        ]
+    },
+    "required": ["id", "one", "two"],
+    "definitions": {
+        "one_required": {
+            "one": {
+                "description": "one",
+                "type": "string",
+                "pattern": ".+"
+            },
+            "two": {
+                "description": "two",
+                "type": "string"
+            }
+        },
+        "two_required": {
+            "one": {
+                "description": "one",
+                "type": "string"
+            },
+            "two": {
+                "description": "two",
+                "type": "string",
+                "pattern": ".+"                
+            }
+        }
+    }
+}
