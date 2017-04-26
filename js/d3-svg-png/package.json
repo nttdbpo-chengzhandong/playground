@@ -1,0 +1,17 @@
+{
+  "name": "d3-svg-png",
+  "version": "0.1.0",
+  "description": "",
+  "main": "index.js",
+  "dependencies": {
+    "d3": "^4.8.0",
+    "jsdom": "^10.0.0",
+    "svg2png": "^4.1.1"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "MIT"
+}
