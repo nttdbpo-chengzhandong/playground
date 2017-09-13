@@ -20,7 +20,8 @@ gitlab.projects.all((projects) => {
         return (project.path_with_namespace == `${owner}/${repo}`);
     });
     gitlab.projects.issues.list(project.id, {
-        per_page: 1000
+        search: errorMessage,
+        per_page: 10
     }, (issues) => {
         let issue = issues.find((issue) => {
             return (issue.title == errorMessage);
@@ -30,8 +31,9 @@ gitlab.projects.all((projects) => {
             console.log('reopen:' + issue.id);
             gitlab.issues.edit(project.id, issue.id, {
                 state_event: 'reopen'
-            }, (data) => {
-                console.log(data);
+            });
+            gitlab.notes.create(project.id, issue.id, {
+                body: 'this is comment'
             });
         } else {
             // create issue
@@ -39,8 +41,6 @@ gitlab.projects.all((projects) => {
                 title: errorMessage,
                 description: 'this is test',
                 labels: 'bug,error'
-            }, (data) => {
-                console.log(data);
             });
         }
     });
