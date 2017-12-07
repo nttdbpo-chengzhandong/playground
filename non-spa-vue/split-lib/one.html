@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="UTF-8">
+    </head>
+    <body>
+        <div id="app">
+            <el-button @click="visible = true">Button</el-button>
+            <el-dialog :visible.sync="visible" title="Hello world">
+                <p>One</p>
+            </el-dialog>
+        </div>
+    </body>
+    <script src="dist/lib.js"></script>
+    <script src="dist/one.js"></script>
+</html>
