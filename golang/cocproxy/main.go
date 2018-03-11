@@ -2,6 +2,7 @@ package main
 
 import (
 	"bytes"
+	"flag"
 	"fmt"
 	"io/ioutil"
 	"log"
@@ -11,21 +12,31 @@ import (
 	"os"
 )
 
+// Proxy ...
+type Proxy struct {
+	TargetHost string
+}
+
 // proxyHandler ...
-func proxyHandler(w http.ResponseWriter, req *http.Request) {
+func (proxy *Proxy) proxyHandler(w http.ResponseWriter, req *http.Request) {
+
+	t, err := url.Parse(proxy.TargetHost)
+	if err != nil {
+		log.Fatal(err.Error())
+	}
 
 	u := req.URL
 	path := u.Path[1:]
 
 	fmt.Printf("%s\n", path)
-	_, err := os.Stat(path)
+	_, err = os.Stat(path)
 	if err == nil {
 		http.ServeFile(w, req, path)
 		return
 	}
 
-	u.Scheme = "http"
-	u.Host = "mailback.me"
+	u.Scheme = t.Scheme
+	u.Host = t.Host
 
 	buffer, err := ioutil.ReadAll(req.Body)
 	if err != nil {
@@ -43,20 +54,21 @@ func proxyHandler(w http.ResponseWriter, req *http.Request) {
 	nreq.URL.Scheme = u.Scheme
 	nreq.Host = u.Host
 
-	t, err := url.Parse("http://mailback.me")
-	if err != nil {
-		log.Fatal(err.Error())
-	}
-
 	p := httputil.NewSingleHostReverseProxy(t)
 
 	p.ServeHTTP(w, nreq)
 }
 
 func main() {
-	http.HandleFunc("/", proxyHandler)
+	host := flag.String("host", "https://google.com", "target host")
+	port := flag.Int("port", 8090, "listen port")
+	flag.Parse()
 
-	err := http.ListenAndServe(":8090", nil)
+	proxy := Proxy{TargetHost: *host}
+
+	http.HandleFunc("/", proxy.proxyHandler)
+
+	err := http.ListenAndServe(fmt.Sprintf(":%d", *port), nil)
 	if err != nil {
 		log.Fatal(err.Error())
 	}
